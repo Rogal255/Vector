@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="CMakeSharedSettings">
-    <configurations>
-      <configuration PROFILE_NAME="Debug MSVC 2019" ENABLED="true" GENERATION_DIR="Debug" CONFIG_NAME="Debug" />
-      <configuration PROFILE_NAME="Release MSVC 2019" ENABLED="true" GENERATION_DIR="Release" CONFIG_NAME="Release" />
-    </configurations>
-  </component>
-</project>
