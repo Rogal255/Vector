@@ -6,6 +6,13 @@ namespace pr {
 template <typename T, typename Allocator = std::allocator<T>>
 class Vector {
 public:
+    ~Vector() {
+        if (front_) {
+            std::destroy_n(front_, size_);
+            alloc_.deallocate(front_, size_);
+        }
+    }
+
     void push_back(T&& value) {
         if (size_ == capacity_) {
             reallocate();
