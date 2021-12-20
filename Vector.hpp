@@ -5,6 +5,9 @@
 
 namespace pr {
 
+template <typename Type>
+using remove_cv_ref = std::remove_cv_t<std::remove_reference_t<Type>>;
+
 template <typename T, typename Allocator = std::allocator<T>>
 class Vector {
 public:
@@ -17,7 +20,7 @@ public:
 
     template <typename U>
     void push_back(U&& value) {
-        static_assert(std::is_convertible_v<U, T>);
+        static_assert(std::is_same_v<remove_cv_ref<T>, remove_cv_ref<U>>);
         if (size_ == capacity_) {
             reallocate();
         }
