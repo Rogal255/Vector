@@ -24,7 +24,7 @@ public:
         if (size_ == capacity_) {
             reallocate();
         }
-        std::construct_at(front_ + size_++, std::forward<T>(value));
+        std::construct_at(front_ + size_++, std::forward<U>(value));
     }
 
     template <typename... Args>
