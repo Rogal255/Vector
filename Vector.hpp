@@ -2,6 +2,7 @@
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
+#include <utility>
 
 namespace pr {
 
@@ -57,7 +58,7 @@ private:
             capacity_ = size_ * 2;
             T* tmpPtr = alloc_.allocate(capacity_);
             for (std::size_t i {0}; i < size_; ++i) {
-                *(tmpPtr + i) = *(front_ + i);
+                *(tmpPtr + i) = std::move(*(front_ + i));
             }
             std::destroy_n(front_, size_);
             alloc_.deallocate(front_, size_);

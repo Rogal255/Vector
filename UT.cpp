@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include <gtest/gtest.h>
+#include <stdexcept>
 
 TEST(Vector, CapacityIncreaseTest) {
     pr::Vector<int> vec;
@@ -31,6 +32,27 @@ TEST(Vector, push_back) {
     }
 }
 
+TEST(Vector, subscriptOperator) {
+    pr::Vector<std::size_t> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(i);
+        ASSERT_EQ(vec[i], i);
+    }
+}
+
+TEST(Vector, at) {
+    pr::Vector<std::size_t> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(i);
+        ASSERT_EQ(vec.at(i), i);
+        ASSERT_THROW(vec.at(i + 1), std::out_of_range);
+    }
+    ASSERT_NO_THROW(vec.at(iterations - 1));
+    ASSERT_THROW(vec.at(iterations), std::out_of_range);
+}
+
 TEST(Vector, reallocationTest) {
     pr::Vector<std::size_t> vec;
     constexpr std::size_t iterations {10000};
@@ -39,5 +61,7 @@ TEST(Vector, reallocationTest) {
     }
     for (std::size_t i {0}; i < iterations; ++i) {
         ASSERT_EQ(vec[i], i);
+        ASSERT_EQ(vec.at(i), i);
     }
 }
+
