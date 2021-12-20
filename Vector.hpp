@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <stdexcept>
+#include <type_traits>
 
 namespace pr {
 
@@ -13,11 +15,13 @@ public:
         }
     }
 
-    void push_back(T&& value) {
+    template <typename U>
+    void push_back(U&& value) {
+        static_assert(std::is_convertible_v<U, T>);
         if (size_ == capacity_) {
             reallocate();
         }
-        *(front_ + size_++) = value;
+        std::construct_at(front_ + size_++, std::forward<T>(value));
     }
 
     template <typename... Args>
@@ -26,6 +30,14 @@ public:
             reallocate();
         }
         return *std::construct_at(front_ + size_++, std::forward<Args>(args)...);
+    }
+
+    T& operator[](std::size_t index) { return *(front_ + index); }
+    T& at(std::size_t index) {
+        if (index >= size_) {
+            throw std::out_of_range("pr::Vector::at method");
+        }
+        return operator[](index);
     }
 
     [[nodiscard]] std::size_t size() const { return size_; }
