@@ -30,3 +30,14 @@ TEST(Vector, push_back) {
         ASSERT_EQ(vec.at(i), i);
     }
 }
+
+TEST(Vector, reallocationTest) {
+    pr::Vector<std::size_t> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(i);
+    }
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_EQ(vec[i], i);
+    }
+}
