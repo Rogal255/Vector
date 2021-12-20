@@ -25,7 +25,7 @@ public:
         if (size_ == capacity_) {
             reallocate();
         }
-        std::construct_at(front_ + size_++, std::forward<U>(value));
+        std::allocator_traits<Allocator>::construct(alloc_, front_ + size_++, std::forward<U>(value));
     }
 
     template <typename... Args>
@@ -33,7 +33,8 @@ public:
         if (size_ == capacity_) {
             reallocate();
         }
-        return *std::construct_at(front_ + size_++, std::forward<Args>(args)...);
+        std::allocator_traits<Allocator>::construct(alloc_, front_ + size_, std::forward<Args>(args)...);
+        return *(front_ + size_++);
     }
 
     T& operator[](std::size_t index) { return *(front_ + index); }
