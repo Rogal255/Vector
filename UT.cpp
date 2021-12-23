@@ -65,3 +65,36 @@ TEST(Vector, reallocationTest) {
     }
 }
 
+TEST(Vector, reserveTest) {
+    pr::Vector<std::size_t> vec;
+    ASSERT_EQ(vec.capacity(), 0);
+    constexpr std::size_t iterations {99};
+    vec.reserve(iterations + 1);
+    ASSERT_EQ(vec.capacity(), iterations + 1);
+    vec.push_back(static_cast<std::size_t>(2));
+    std::size_t* ptr = &vec[0];
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(i);
+    }
+    ASSERT_EQ(ptr, &vec[0]);
+    ASSERT_EQ(vec[0], 2);
+    ASSERT_EQ(vec.capacity(), iterations + 1);
+    vec.push_back(static_cast<std::size_t>(3));
+    ASSERT_EQ(vec.capacity(), (iterations + 1) * 2);
+    ASSERT_NE(ptr, &vec[0]);
+    ASSERT_EQ(vec[0], 2);
+    ASSERT_EQ(vec[iterations + 1], 3);
+    vec.reserve(vec.capacity() - 1);
+    ASSERT_EQ(vec.capacity(), (iterations + 1) * 2);
+}
+
+TEST(Vector, dataTest) {
+    pr::Vector<std::size_t> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(i);
+    }
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_EQ(vec.data()[i], i);
+    }
+}

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
@@ -15,24 +16,26 @@ public:
     ~Vector() {
         if (front_) {
             std::destroy_n(front_, size_);
-            alloc_.deallocate(front_, size_);
+            alloc_.deallocate(front_, capacity_);
+        }
+    }
+
+    void reserve(std::size_t newCapacity) {
+        if (capacity_ < newCapacity) {
+            reallocate(newCapacity);
         }
     }
 
     template <typename U>
     void push_back(U&& value) {
         static_assert(std::is_same_v<remove_cv_ref<T>, remove_cv_ref<U>>);
-        if (size_ == capacity_) {
-            reallocate();
-        }
+        reallocateIfNeeded();
         std::allocator_traits<Allocator>::construct(alloc_, front_ + size_++, std::forward<U>(value));
     }
 
     template <typename... Args>
     T& emplace_back(Args&&... args) {
-        if (size_ == capacity_) {
-            reallocate();
-        }
+        reallocateIfNeeded();
         std::allocator_traits<Allocator>::construct(alloc_, front_ + size_, std::forward<Args>(args)...);
         return *(front_ + size_++);
     }
@@ -45,6 +48,7 @@ public:
         return operator[](index);
     }
 
+    [[nodiscard]] T* data() { return front_; }
     [[nodiscard]] std::size_t size() const { return size_; }
     [[nodiscard]] std::size_t capacity() const { return capacity_; }
 
@@ -54,20 +58,29 @@ private:
     std::size_t capacity_ {0};
     T* front_ {nullptr};
 
-    void reallocate() {
+    void reallocateIfNeeded() {
+        if (size_ == capacity_) {
+            if (capacity_ == 0) {
+                reallocate(1);
+            } else {
+                reallocate(capacity_ * 2);
+            }
+        }
+    }
+
+    void reallocate(std::size_t newCapacity) {
         if (front_) {
-            capacity_ = size_ * 2;
-            T* tmpPtr = alloc_.allocate(capacity_);
+            T* tmpPtr = alloc_.allocate(newCapacity);
             for (std::size_t i {0}; i < size_; ++i) {
                 *(tmpPtr + i) = std::move(*(front_ + i));
             }
             std::destroy_n(front_, size_);
-            alloc_.deallocate(front_, size_);
+            alloc_.deallocate(front_, capacity_);
             front_ = tmpPtr;
         } else {
-            capacity_ = 1;
-            front_ = alloc_.allocate(capacity_);
+            front_ = alloc_.allocate(newCapacity);
         }
+        capacity_ = newCapacity;
     }
 };
 
