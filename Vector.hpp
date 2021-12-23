@@ -46,7 +46,7 @@ public:
         return *(front_ + size_++);
     }
 
-    T& operator[](std::size_t index) { return *(front_ + index); }
+    T& operator[](std::size_t index) noexcept { return *(front_ + index); }
     T& at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("pr::Vector::at method");
@@ -54,9 +54,9 @@ public:
         return operator[](index);
     }
 
-    [[nodiscard]] T* data() { return front_; }
-    [[nodiscard]] std::size_t size() const { return size_; }
-    [[nodiscard]] std::size_t capacity() const { return capacity_; }
+    [[nodiscard]] T* data() noexcept { return front_; }
+    [[nodiscard]] std::size_t size() const noexcept { return size_; }
+    [[nodiscard]] std::size_t capacity() const noexcept { return capacity_; }
 
 private:
     Allocator alloc_;
