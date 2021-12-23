@@ -88,6 +88,22 @@ TEST(Vector, reserveTest) {
     ASSERT_EQ(vec.capacity(), (iterations + 1) * 2);
 }
 
+TEST(Vector, shrink_to_fit) {
+    pr::Vector<int> vec;
+    ASSERT_EQ(vec.capacity(), 0);
+    vec.reserve(100);
+    ASSERT_EQ(vec.capacity(), 100);
+    vec.push_back(1);
+    vec.shrink_to_fit();
+    ASSERT_EQ(vec.capacity(), 1);
+    ASSERT_EQ(vec[0], 1);
+    vec.reserve(10);
+    ASSERT_EQ(vec.capacity(), 10);
+    vec.push_back(2);
+    vec.shrink_to_fit();
+    ASSERT_EQ(vec.capacity(), vec.size());
+}
+
 TEST(Vector, dataTest) {
     pr::Vector<std::size_t> vec;
     constexpr std::size_t iterations {10000};

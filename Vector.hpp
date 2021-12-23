@@ -26,6 +26,12 @@ public:
         }
     }
 
+    void shrink_to_fit() {
+        if (capacity_ > size_) {
+            reallocate(size_);
+        }
+    }
+
     template <typename U>
     void push_back(U&& value) {
         static_assert(std::is_same_v<remove_cv_ref<T>, remove_cv_ref<U>>);
