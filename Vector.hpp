@@ -7,8 +7,8 @@
 
 namespace pr {
 
-template <typename Type>
-using remove_cv_ref = std::remove_cv_t<std::remove_reference_t<Type>>;
+template <typename T, typename U>
+concept SameType = std::is_same_v<std::remove_cvref_t<T>, std::remove_cvref_t<U>>;
 
 template <typename T, typename Allocator = std::allocator<T>>
 class Vector {
@@ -33,8 +33,7 @@ public:
     }
 
     template <typename U>
-    void push_back(U&& value) {
-        static_assert(std::is_same_v<remove_cv_ref<T>, remove_cv_ref<U>>);
+    void push_back(U&& value) requires SameType<T, U> {
         reallocateIfNeeded();
         std::allocator_traits<Allocator>::construct(alloc_, front_ + size_++, std::forward<U>(value));
     }
