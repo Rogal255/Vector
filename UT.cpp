@@ -22,17 +22,8 @@ TEST(Vector, CapacityIncreaseTest) {
     }
 }
 
+// Also checks subscript operator
 TEST(Vector, push_back) {
-    pr::Vector<std::size_t> vec;
-    constexpr std::size_t iterations {10000};
-    for (std::size_t i {0}; i < iterations; ++i) {
-        vec.push_back(i);
-        ASSERT_EQ(vec[i], i);
-        ASSERT_EQ(vec.at(i), i);
-    }
-}
-
-TEST(Vector, subscriptOperator) {
     pr::Vector<std::size_t> vec;
     constexpr std::size_t iterations {10000};
     for (std::size_t i {0}; i < iterations; ++i) {
@@ -61,7 +52,6 @@ TEST(Vector, reallocationTest) {
     }
     for (std::size_t i {0}; i < iterations; ++i) {
         ASSERT_EQ(vec[i], i);
-        ASSERT_EQ(vec.at(i), i);
     }
 }
 
@@ -91,26 +81,35 @@ TEST(Vector, reserveTest) {
 TEST(Vector, shrink_to_fit) {
     pr::Vector<int> vec;
     ASSERT_EQ(vec.capacity(), 0);
+    ASSERT_EQ(vec.size(), 0);
     vec.reserve(100);
     ASSERT_EQ(vec.capacity(), 100);
+    ASSERT_EQ(vec.size(), 0);
     vec.push_back(1);
+    ASSERT_EQ(vec.size(), 1);
     vec.shrink_to_fit();
-    ASSERT_EQ(vec.capacity(), 1);
     ASSERT_EQ(vec[0], 1);
+    ASSERT_EQ(vec.capacity(), 1);
+    ASSERT_EQ(vec.size(), 1);
     vec.reserve(10);
     ASSERT_EQ(vec.capacity(), 10);
+    ASSERT_EQ(vec.size(), 1);
     vec.push_back(2);
+    ASSERT_EQ(vec.size(), 2);
     vec.shrink_to_fit();
-    ASSERT_EQ(vec.capacity(), vec.size());
+    ASSERT_EQ(vec.capacity(), 2);
+    ASSERT_EQ(vec.size(), 2);
+    ASSERT_EQ(vec[0], 1);
+    ASSERT_EQ(vec[1], 2);
 }
 
 TEST(Vector, dataTest) {
     pr::Vector<std::size_t> vec;
+    ASSERT_EQ(vec.data(), nullptr);
     constexpr std::size_t iterations {10000};
     for (std::size_t i {0}; i < iterations; ++i) {
         vec.push_back(i);
     }
-    for (std::size_t i {0}; i < iterations; ++i) {
-        ASSERT_EQ(vec.data()[i], i);
-    }
+    ASSERT_NE(vec.data(), nullptr);
+    ASSERT_EQ(vec.data(), &vec[0]);
 }
