@@ -3,7 +3,7 @@ project(Vector)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Vector main.cpp)
+add_executable(Vector main.cpp Helpers.cpp)
 
 include(FetchContent)
 
@@ -15,5 +15,5 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 enable_testing()
-add_executable(UT UT.cpp)
+add_executable(UT UT.cpp Helpers.cpp)
 target_link_libraries(UT gtest_main)

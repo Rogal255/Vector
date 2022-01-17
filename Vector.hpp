@@ -1,4 +1,5 @@
 #pragma once
+#include "Helpers.hpp"
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -87,6 +88,43 @@ private:
         }
         capacity_ = newCapacity;
     }
+};
+
+template <typename Allocator>
+class Vector<bool, Allocator> {
+public:
+    void reserve(std::size_t newCapacity) {
+        if (vec_.capacity() < (newCapacity / 8) + 1) {
+            vec_.reserve((newCapacity / 8) + 1);
+        }
+    }
+
+    void shrink_to_fit() { vec_.shrink_to_fit(); }
+
+    void push_back(const bool& value) {
+        if (++size_ > (vec_.size() * 8)) {
+            uint8_t newElement = static_cast<uint8_t>(value) << 0;
+            vec_.push_back(newElement);
+            return;
+        }
+        if (value) {
+            vec_[size_ / 8] |= 1 << size_ % 8;
+        } else {
+            vec_[size_ / 8] &= 0 << size_ % 8;
+        }
+    }
+
+    boolReference operator[](std::size_t index) noexcept { return boolReference(vec_[index / 8], index % 8); }
+    boolReference at(std::size_t index) {
+        if (index >= size_) {
+            throw std::out_of_range("pr::Vector::at method");
+        }
+        return operator[](index);
+    }
+
+private:
+    Vector<uint8_t, Allocator> vec_;
+    std::size_t size_ {0};
 };
 
 }
