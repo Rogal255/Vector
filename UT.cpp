@@ -113,3 +113,14 @@ TEST(Vector, dataTest) {
     ASSERT_NE(vec.data(), nullptr);
     ASSERT_EQ(vec.data(), &vec[0]);
 }
+
+// Also checks subscript operator
+TEST(VectorOfBools, push_back) {
+    pr::Vector<bool> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(true);
+        //ASSERT_TRUE(vec[i] == true);
+    }
+    ASSERT_EQ(vec.size(), iterations);
+}

@@ -90,8 +90,8 @@ private:
     }
 };
 
-template <typename Allocator>
-class Vector<bool, Allocator> {
+template <>
+class Vector<bool> {
 public:
     void reserve(std::size_t newCapacity) {
         if (vec_.capacity() < (newCapacity / 8) + 1) {
@@ -103,9 +103,7 @@ public:
 
     void push_back(const bool& value) {
         if (++size_ > (vec_.size() * 8)) {
-            uint8_t newElement = static_cast<uint8_t>(value) << 0;
-            vec_.push_back(newElement);
-            return;
+            vec_.push_back(static_cast<uint8_t>(0));
         }
         if (value) {
             vec_[size_ / 8] |= 1 << size_ % 8;
@@ -122,8 +120,11 @@ public:
         return operator[](index);
     }
 
+    [[nodiscard]] std::size_t size() const noexcept { return size_; }
+    [[nodiscard]] std::size_t capacity() const noexcept { return vec_.capacity() * 8; }
+
 private:
-    Vector<uint8_t, Allocator> vec_;
+    Vector<uint8_t, std::allocator<uint8_t>> vec_;
     std::size_t size_ {0};
 };
 

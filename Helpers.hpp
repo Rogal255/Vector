@@ -9,6 +9,9 @@ public:
     boolReference& operator=(const boolReference& rhs);
     [[nodiscard]] bool get() const;
 
+    bool operator==(bool rhs) const;
+    bool operator==(const boolReference& rhs) const;
+
 private:
     uint8_t& vectorElement_;
     uint8_t elementPosition_;

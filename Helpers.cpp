@@ -14,6 +14,12 @@ boolReference& boolReference::operator=(bool rhs) {
     return *this;
 }
 
-boolReference& boolReference::operator=(const boolReference& rhs) { operator=(rhs.get()); }
+boolReference& boolReference::operator=(const boolReference& rhs) {
+    *this = rhs.get();
+    return *this;
+}
 
 bool boolReference::get() const { return vectorElement_ & (1 << elementPosition_); }
+
+bool boolReference::operator==(bool rhs) const { return this->get() == rhs; }
+bool boolReference::operator==(const boolReference& rhs) const { return this->get() == rhs.get(); }
