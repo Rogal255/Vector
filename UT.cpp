@@ -1,6 +1,5 @@
 #include "Vector.hpp"
 #include <gtest/gtest.h>
-#include <iostream>
 #include <stdexcept>
 
 TEST(Vector, CapacityIncreaseTest) {
@@ -143,16 +142,11 @@ TEST(VectorOfBools, reserve) {
 
 TEST(VectorOfBools, reallocationTest) {
     pr::Vector<bool> vec;
-    constexpr std::size_t iterations {10000};
+    constexpr std::size_t iterations {100};
     for (std::size_t i {0}; i < iterations; ++i) {
         vec.push_back(static_cast<bool>(i % 2));
-        ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
     }
     for (std::size_t i {0}; i < iterations; ++i) {
-        std::cout << "index: " << i << ", value: " << vec[i].get() << '\n';
-    }
-    for (std::size_t i {0}; i < iterations; ++i) {
-        std::cout << "index: " << i << ", value: " << vec[i].get() << '\n';
         ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
     }
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "Helpers.hpp"
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
@@ -108,7 +107,7 @@ public:
         if (value) {
             vec_[size_ / 8] |= 1 << size_ % 8;
         } else {
-            vec_[size_ / 8] &= 0 << size_ % 8;
+            vec_[size_ / 8] &= ~(1 << size_ % 8);
         }
         ++size_;
     }
