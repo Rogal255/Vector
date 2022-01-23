@@ -45,7 +45,7 @@ public:
         return *(front_ + size_++);
     }
 
-    T& operator[](std::size_t index) noexcept { return *(front_ + index); }
+    [[nodiscard]] T& operator[](std::size_t index) noexcept { return *(front_ + index); }
     T& at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("pr::Vector::at method");
@@ -112,7 +112,9 @@ public:
         ++size_;
     }
 
-    boolReference operator[](std::size_t index) noexcept { return boolReference(vec_[index / 8], index % 8); }
+    [[nodiscard]] boolReference operator[](std::size_t index) noexcept {
+        return boolReference {vec_[index / 8], static_cast<uint8_t>(index % 8)};
+    }
 
     boolReference at(std::size_t index) {
         if (index >= size_) {
