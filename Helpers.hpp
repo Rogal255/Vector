@@ -14,6 +14,4 @@ public:
 private:
     uint8_t& vectorElement_;
     uint8_t elementPosition_;
-
-    [[nodiscard]] bool get() const noexcept;
 };
