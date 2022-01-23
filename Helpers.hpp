@@ -7,7 +7,6 @@ public:
     explicit operator bool() const;
     boolReference& operator=(bool rhs);
     boolReference& operator=(const boolReference& rhs);
-    [[nodiscard]] bool get() const;
 
     bool operator==(bool rhs) const;
     bool operator==(const boolReference& rhs) const;
@@ -15,4 +14,6 @@ public:
 private:
     uint8_t& vectorElement_;
     uint8_t elementPosition_;
+
+    [[nodiscard]] bool get() const;
 };

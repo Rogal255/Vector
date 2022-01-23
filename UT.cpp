@@ -184,3 +184,35 @@ TEST(VectorOfBools, at) {
         ASSERT_NO_THROW(vec.at(i));
     }
 }
+
+TEST(boolReference, generalTest) {
+    pr::Vector<bool> vec;
+    vec.push_back(false);
+    auto zeroRef = vec[0];
+    ASSERT_FALSE(vec[0]);
+    ASSERT_TRUE(vec[0] == false);
+    ASSERT_FALSE(zeroRef);
+    vec.push_back(true);
+    auto oneRef = vec[1];
+    ASSERT_TRUE(vec[1]);
+    ASSERT_TRUE(vec[1] == true);
+    ASSERT_TRUE(oneRef);
+    zeroRef = true;
+    ASSERT_TRUE(vec[0]);
+    ASSERT_TRUE(vec[0] == true);
+    ASSERT_TRUE(zeroRef);
+    oneRef = false;
+    ASSERT_FALSE(vec[1]);
+    ASSERT_TRUE(vec[1] == false);
+    ASSERT_FALSE(oneRef);
+    vec.push_back(false);
+    vec[0] = vec[3];
+    ASSERT_FALSE(vec[0]);
+    ASSERT_TRUE(vec[0] == false);
+    ASSERT_FALSE(zeroRef);
+    vec[0] = true;
+    vec[1] = true;
+    ASSERT_TRUE(vec[0] == vec[1]);
+    vec[1] = false;
+    ASSERT_FALSE(vec[0] == vec[1]);
+}
