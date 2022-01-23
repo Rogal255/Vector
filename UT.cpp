@@ -119,8 +119,8 @@ TEST(VectorOfBools, push_back) {
     pr::Vector<bool> vec;
     constexpr std::size_t iterations {10000};
     for (std::size_t i {0}; i < iterations; ++i) {
-        vec.push_back(true);
-        //ASSERT_TRUE(vec[i] == true);
+        vec.push_back(static_cast<bool>(i % 2));
+        ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
     }
     ASSERT_EQ(vec.size(), iterations);
 }

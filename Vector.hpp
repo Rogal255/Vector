@@ -102,7 +102,7 @@ public:
     void shrink_to_fit() { vec_.shrink_to_fit(); }
 
     void push_back(const bool& value) {
-        if (++size_ > (vec_.size() * 8)) {
+        if (size_ + 1 > (vec_.size() * 8)) {
             vec_.push_back(static_cast<uint8_t>(0));
         }
         if (value) {
@@ -110,9 +110,11 @@ public:
         } else {
             vec_[size_ / 8] &= 0 << size_ % 8;
         }
+        ++size_;
     }
 
     boolReference operator[](std::size_t index) noexcept { return boolReference(vec_[index / 8], index % 8); }
+
     boolReference at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("pr::Vector::at method");
