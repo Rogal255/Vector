@@ -9,7 +9,7 @@ boolReference& boolReference::operator=(bool rhs) {
     if (rhs) {
         vectorElement_ |= 1 << elementPosition_;
     } else {
-        vectorElement_ &= 0 << elementPosition_;
+        vectorElement_ &= ~(1 << elementPosition_);
     }
     return *this;
 }
