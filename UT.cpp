@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include <gtest/gtest.h>
+#include <iostream>
 #include <stdexcept>
 
 TEST(Vector, CapacityIncreaseTest) {
@@ -114,7 +115,6 @@ TEST(Vector, dataTest) {
     ASSERT_EQ(vec.data(), &vec[0]);
 }
 
-// Also checks subscript operator
 TEST(VectorOfBools, push_back) {
     pr::Vector<bool> vec;
     constexpr std::size_t iterations {10000};
@@ -123,4 +123,36 @@ TEST(VectorOfBools, push_back) {
         ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
     }
     ASSERT_EQ(vec.size(), iterations);
+}
+
+TEST(VectorOfBools, reserve) {
+    pr::Vector<bool> vec;
+    vec.reserve(10);
+    ASSERT_EQ(vec.capacity(), 16);
+    for (int i {0}; i < 16; ++i) {
+        vec.push_back(true);
+    }
+    ASSERT_EQ(vec.capacity(), 16);
+    vec.reserve(5);
+    ASSERT_EQ(vec.capacity(), 16);
+    vec.reserve(100);
+    ASSERT_EQ(vec.capacity(), 104);
+    vec.reserve(40);
+    ASSERT_EQ(vec.capacity(), 104);
+}
+
+TEST(VectorOfBools, reallocationTest) {
+    pr::Vector<bool> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        vec.push_back(static_cast<bool>(i % 2));
+        ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
+    }
+    for (std::size_t i {0}; i < iterations; ++i) {
+        std::cout << "index: " << i << ", value: " << vec[i].get() << '\n';
+    }
+    for (std::size_t i {0}; i < iterations; ++i) {
+        std::cout << "index: " << i << ", value: " << vec[i].get() << '\n';
+        ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
+    }
 }
