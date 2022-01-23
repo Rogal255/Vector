@@ -100,7 +100,7 @@ public:
 
     void shrink_to_fit() { vec_.shrink_to_fit(); }
 
-    void push_back(const bool& value) {
+    void push_back(bool value) {
         if (size_ + 1 > (vec_.size() * 8)) {
             vec_.push_back(static_cast<uint8_t>(0));
         }
