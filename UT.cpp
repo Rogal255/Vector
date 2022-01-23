@@ -140,13 +140,47 @@ TEST(VectorOfBools, reserve) {
     ASSERT_EQ(vec.capacity(), 104);
 }
 
+TEST(VectorOfBools, sizeTest) {
+    pr::Vector<bool> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_EQ(vec.size(), i);
+        vec.push_back(true);
+    }
+}
+
 TEST(VectorOfBools, reallocationTest) {
     pr::Vector<bool> vec;
-    constexpr std::size_t iterations {100};
+    constexpr std::size_t iterations {10000};
     for (std::size_t i {0}; i < iterations; ++i) {
         vec.push_back(static_cast<bool>(i % 2));
     }
     for (std::size_t i {0}; i < iterations; ++i) {
         ASSERT_TRUE(vec[i] == static_cast<bool>(i % 2));
+    }
+}
+
+TEST(VectorOfBools, shrinkToFitTest) {
+    pr::Vector<bool> vec;
+    vec.reserve(100);
+    ASSERT_EQ(vec.size(), 0);
+    ASSERT_EQ(vec.capacity(), 104);
+    for (std::size_t i {0}; i < 10; ++i) {
+        vec.push_back(true);
+    }
+    ASSERT_EQ(vec.size(), 10);
+    ASSERT_EQ(vec.capacity(), 104);
+    vec.shrink_to_fit();
+    ASSERT_EQ(vec.size(), 10);
+    ASSERT_EQ(vec.capacity(), 16);
+}
+
+TEST(VectorOfBools, at) {
+    pr::Vector<bool> vec;
+    constexpr std::size_t iterations {10000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_THROW(vec.at(i), std::out_of_range);
+        vec.push_back(true);
+        ASSERT_NO_THROW(vec.at(i));
     }
 }
