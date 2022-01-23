@@ -3,17 +3,17 @@
 
 class boolReference {
 public:
-    boolReference(uint8_t& vectorElement, uint8_t elementPosition);
-    explicit operator bool() const;
-    boolReference& operator=(bool rhs);
-    boolReference& operator=(const boolReference& rhs);
+    boolReference(uint8_t& vectorElement, uint8_t elementPosition) noexcept;
+    explicit operator bool() const noexcept;
+    boolReference& operator=(bool rhs) noexcept;
+    boolReference& operator=(const boolReference& rhs) noexcept;
 
-    bool operator==(bool rhs) const;
-    bool operator==(const boolReference& rhs) const;
+    bool operator==(bool rhs) const noexcept;
+    bool operator==(const boolReference& rhs) const noexcept;
 
 private:
     uint8_t& vectorElement_;
     uint8_t elementPosition_;
 
-    [[nodiscard]] bool get() const;
+    [[nodiscard]] bool get() const noexcept;
 };
