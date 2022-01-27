@@ -114,6 +114,35 @@ TEST(Vector, dataTest) {
     ASSERT_EQ(vec.data(), &vec[0]);
 }
 
+TEST(Vector, emplace_back) {
+    struct Dummy {
+        Dummy(int t_x, int t_y, int t_z) : x(t_x), y(t_y), z(t_z) { }
+        bool operator==(const Dummy& rhs) const {
+            if (x != rhs.x) {
+                return false;
+            }
+            if (y != rhs.y) {
+                return false;
+            }
+            if (z != rhs.z) {
+                return false;
+            }
+            return true;
+        }
+        int x, y, z;
+    };
+    pr::Vector<Dummy> vec;
+    constexpr std::size_t iterations {1000};
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_TRUE(vec.emplace_back(i, i + 1, i + 2) == Dummy(i, i + 1, i + 2));
+    }
+    for (std::size_t i {0}; i < iterations; ++i) {
+        ASSERT_EQ(vec[i].x, i);
+        ASSERT_EQ(vec[i].y, i + 1);
+        ASSERT_EQ(vec[i].z, i + 2);
+    }
+}
+
 TEST(VectorOfBools, push_back) {
     pr::Vector<bool> vec;
     constexpr std::size_t iterations {10000};
